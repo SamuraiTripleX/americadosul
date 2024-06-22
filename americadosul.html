@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Adivinhação - População dos Países da América do Sul</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 10px;
+            box-sizing: border-box;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .question {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        .options, .matches {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .option, .match {
+            padding: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            user-select: none;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+        }
+        .match {
+            background-color: #fff;
+        }
+        .match.correct {
+            background-color: lightgreen;
+        }
+        .match.wrong {
+            background-color: #ffcccc;
+        }
+        .result {
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+        img {
+            max-width: 30px;
+            height: auto;
+            margin-bottom: 2px;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Jogo de Adivinhação - População dos Países da América do Sul</h1>
+    
+    <div class="question">
+        <p>Arraste a população para o país correspondente:</p>
+    </div>
+
+    <div class="options">
+        <div id="brasil" class="option" draggable="true" ondragstart="drag(event)" data-populacao="215.5">215.5M</div>
+        <div id="colombia" class="option" draggable="true" ondragstart="drag(event)" data-populacao="52">52M</div>
+        <div id="argentina" class="option" draggable="true" ondragstart="drag(event)" data-populacao="46">46M</div>
+        <div id="peru" class="option" draggable="true" ondragstart="drag(event)" data-populacao="34">34M</div>
+        <div id="venezuela" class="option" draggable="true" ondragstart="drag(event)" data-populacao="28">28M</div>
+        <div id="chile" class="option" draggable="true" ondragstart="drag(event)" data-populacao="19.5">19.5M</div>
+        <div id="equador" class="option" draggable="true" ondragstart="drag(event)" data-populacao="18">18M</div>
+        <div id="bolivia" class="option" draggable="true" ondragstart="drag(event)" data-populacao="12">12M</div>
+        <div id="paraguai" class="option" draggable="true" ondragstart="drag(event)" data-populacao="7.5">7.5M</div>
+        <div id="uruguai" class="option" draggable="true" ondragstart="drag(event)" data-populacao="3.5">3.5M</div>
+        <div id="guiana" class="option" draggable="true" ondragstart="drag(event)" data-populacao="0.8">0.8M</div>
+        <div id="suriname" class="option" draggable="true" ondragstart="drag(event)" data-populacao="0.6">0.6M</div>
+    </div>
+
+    <div class="matches">
+        <div id="venezuela" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/venezuela.png" alt="Venezuela"> Venezuela
+        </div>
+        <div id="guiana" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/guiana.png" alt="Guiana"> Guiana
+        </div>
+        <div id="bolivia" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/bolivia.png" alt="Bolívia"> Bolívia
+        </div>
+        <div id="argentina" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/argentina.png" alt="Argentina"> Argentina
+        </div>
+        <div id="chile" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/chile.png" alt="Chile"> Chile
+        </div>
+        <div id="brasil" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/brasil.png" alt="Brasil"> Brasil
+        </div>
+        <div id="peru" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/peru.png" alt="Peru"> Peru
+        </div>
+        <div id="colombia" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/colombia.png" alt="Colômbia"> Colômbia
+        </div>
+        <div id="suriname" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/suriname.png" alt="Suriname"> Suriname
+        </div>
+        <div id="paraguai" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/paraguai.png" alt="Paraguai"> Paraguai
+        </div>
+        <div id="equador" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/equador.png" alt="Equador"> Equador
+        </div>
+        <div id="uruguai" class="match" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <img src="bandeiras/uruguai.png" alt="Uruguai"> Uruguai
+        </div>
+    </div>
+
+    <div class="result" id="resultado"></div>
+
+    <button onclick="resetGame()">Reiniciar Jogo</button>
+
+    <script>
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            var data = event.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+            var dropzone = event.target;
+
+            if (!dropzone.classList.contains('match')) {
+                dropzone = dropzone.closest('.match');
+            }
+
+            if (dropzone) {
+                var pais = dropzone.id;
+                var populacaoDragged = draggedElement.getAttribute('data-populacao');
+                var paisDragged = draggedElement.id;
+
+                if (pais === paisDragged) {
+                    dropzone.classList.remove('wrong');
+                    dropzone.classList.add('correct');
+                    dropzone.innerHTML = `<img src="bandeiras/${pais}.png" alt="Bandeira de ${pais}"> ${pais.charAt(0).toUpperCase() + pais.slice(1)} - <span class="populacao">${populacaoDragged} milhões</span>`;
+                    draggedElement.style.display = 'none';
+                    document.getElementById('resultado').innerHTML += `<p>${pais.charAt(0).toUpperCase() + pais.slice(1)} - ${populacaoDragged} milhões</p>`;
+                    checkCompletion();
+                } else {
+                    dropzone.classList.remove('correct');
+                    dropzone.classList.add('wrong');
+                }
+            }
+        }
+
+        function checkCompletion() {
+            var allMatches = document.querySelectorAll('.match');
+            var allCorrect = true;
+
+            allMatches.forEach(match => {
+                if (!match.classList.contains('correct')) {
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                document.getElementById('resultado').innerHTML += "<strong>Parabéns! Todas as correspondências estão corretas!</strong>";
+            }
+        }
+
+        function resetGame() {
+            var matches = document.querySelectorAll('.match');
+            matches.forEach(match => {
+                match.classList.remove('correct', 'wrong');
+                match.innerHTML = `<img src="bandeiras/${match.id}.png" alt="Bandeira de ${match.id.charAt(0).toUpperCase() + match.id.slice(1)}"> ${match.id.charAt(0).toUpperCase() + match.id.slice(1)}`;
+            });
+
+            var options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.style.display = 'block';
+            });
+
+            document.getElementById('resultado').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
